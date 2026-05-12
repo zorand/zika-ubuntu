@@ -1,0 +1,14 @@
+[Unit]
+Description=Signal Desktop
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+# --start-in-tray keeps Signal running in background waiting for calls
+# signal-call-raiser.service handles raising the window on incoming calls
+ExecStart=/usr/bin/signal-desktop --start-in-tray
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=graphical-session.target
