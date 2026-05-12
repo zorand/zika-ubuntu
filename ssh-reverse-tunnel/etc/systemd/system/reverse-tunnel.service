@@ -1,0 +1,21 @@
+[Unit]
+Description=Reverse SSH Tunnel to Google VM
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=zika
+EnvironmentFile=/etc/systemd/system/reverse-tunnel.conf
+ExecStart=/usr/bin/ssh -NT \
+    -i ${TUNNEL_KEY} \
+    -o ServerAliveInterval=30 \
+    -o ServerAliveCountMax=3 \
+    -o ExitOnForwardFailure=yes \
+    -o StrictHostKeyChecking=no \
+    -R ${REMOTE_BIND_IP}:${REMOTE_PORT}:localhost:${LOCAL_PORT} \
+    ${REMOTE_USER}@${REMOTE_HOST}
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
